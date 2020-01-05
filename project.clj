@@ -18,7 +18,7 @@
 
   :dependencies
   [[mvxcvi/alphabase "1.0.0"]
-   [multiformats/clj-varint "0.1.1"]]
+   [org.clojars.blabno/clj-varint "0.1.3-SNAPSHOT"]]
 
   :cljsbuild
   {:builds {:test {:source-paths ["src" "test"]

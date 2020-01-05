@@ -3,13 +3,12 @@
     #?(:clj [clojure.test :refer :all]
        :cljs [cljs.test :refer-macros [deftest is testing]])
     [alphabase.bytes :as bytes]
-    [clojure.string :as str]
+    [varint.core :as varint]
     [multihash.core :as multihash])
   #?(:clj (:import
             clojure.lang.ExceptionInfo
             java.io.ByteArrayInputStream
-            java.nio.ByteBuffer
-            (net.mpare.varint VarInt))))
+            java.nio.ByteBuffer)))
 
 
 (deftest app-specific-codes
@@ -131,10 +130,10 @@
       ([code length]
        (stream-fixture code length length))
       ([code length actual]
-       (let [code-varint-size   (VarInt/varIntSize code)
+       (let [code-varint-size   (varint/varint-size code)
              buffer (bytes/byte-array actual)]
-         (VarInt/putVarInt code buffer 0)
-         (VarInt/putVarInt length buffer code-varint-size)
+         (varint/put-varint code buffer 0)
+         (varint/put-varint length buffer code-varint-size)
          (ByteArrayInputStream. buffer)))))
 
 

@@ -3,7 +3,7 @@
   (:require
     [alphabase.base58 :as b58]
     [alphabase.bytes :as bytes]
-    [multihash.varint :as clj-varint]
+    [varint.core :as varint]
     [alphabase.hex :as hex])
   #?(:clj (:import
             (clojure.lang ILookup IMeta IObj)
@@ -160,11 +160,11 @@
   [mhash]
   (let [code               (:code mhash)
         length             (:length mhash)
-        code-varint-size   (clj-varint/varint-size code)
-        length-varint-size (clj-varint/varint-size length)
+        code-varint-size   (varint/varint-size code)
+        length-varint-size (varint/varint-size length)
         encoded            (bytes/byte-array (+ length code-varint-size length-varint-size))]
-    (clj-varint/put-varint code encoded 0)
-    (clj-varint/put-varint length encoded code-varint-size)
+    (varint/put-varint code encoded 0)
+    (varint/put-varint length encoded code-varint-size)
     (bytes/copy (:digest mhash) 0 encoded (+ code-varint-size length-varint-size) length)
     encoded))
 
@@ -196,10 +196,10 @@
                (str "Cannot read multihash from byte array: " encoded-size
                     " is less than the minimum of " min-size)
                {:type :multihash/bad-input}))))
-  (let [code               (clj-varint/byte-array->varint encoded)
-        code-varint-size   (clj-varint/varint-size code)
-        length             (clj-varint/byte-array->varint encoded code-varint-size)
-        length-varint-size (clj-varint/varint-size length)
+  (let [code               (varint/byte-array->varint encoded)
+        code-varint-size   (varint/varint-size code)
+        length             (varint/byte-array->varint encoded code-varint-size)
+        length-varint-size (varint/varint-size length)
         payload            (- (alength encoded) code-varint-size length-varint-size)]
     (when-not (pos? length)
       (throw (ex-info
@@ -222,7 +222,7 @@
      invalid or there is an error reading from the stream."
      ^bytes
      [^InputStream input]
-     (let [length (clj-varint/input-stream->varint input)]
+     (let [length (varint/input-stream->varint input)]
        (when-not (pos? length)
          (throw (ex-info
                   (format "Byte %02x is not a valid digest length." length)
@@ -271,6 +271,6 @@
 
        (decode
          [source]
-         (let [code   (clj-varint/input-stream->varint source)
+         (let [code   (varint/input-stream->varint source)
                digest (read-stream-digest source)]
            (create code digest)))]))
