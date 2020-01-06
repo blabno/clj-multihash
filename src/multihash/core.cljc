@@ -3,8 +3,8 @@
   (:require
     [alphabase.base58 :as b58]
     [alphabase.bytes :as bytes]
-    [varint.core :as varint]
-    [alphabase.hex :as hex])
+    [alphabase.hex :as hex]
+    [varint.core :as varint])
   #?(:clj (:import
             (clojure.lang ILookup IMeta IObj)
             java.io.InputStream

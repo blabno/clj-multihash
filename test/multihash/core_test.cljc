@@ -3,8 +3,8 @@
     #?(:clj [clojure.test :refer :all]
        :cljs [cljs.test :refer-macros [deftest is testing]])
     [alphabase.bytes :as bytes]
-    [varint.core :as varint]
-    [multihash.core :as multihash])
+    [multihash.core :as multihash]
+    [varint.core :as varint])
   #?(:clj (:import
             clojure.lang.ExceptionInfo
             java.io.ByteArrayInputStream
